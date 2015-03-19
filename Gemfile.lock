@@ -85,6 +85,8 @@ GEM
       mini_portile (~> 0.6.0)
     oauth (0.4.7)
     pg (0.18.1)
+    puma (2.11.1)
+      rack (>= 1.1, < 2.0)
     rack (1.6.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -170,6 +172,7 @@ DEPENDENCIES
   jquery-rails (~> 4.0.3)
   jquery-ui-rails (~> 5.0.3)
   pg (~> 0.18.1)
+  puma
   rails (= 4.2.0)
   rails_12factor
   ruby-trello (~> 1.1.3)

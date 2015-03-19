@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.2.0'
+
 gem 'rails', '4.2.0'
 gem 'pg', '~> 0.18.1'
 gem 'sass-rails', '~> 5.0.1'
@@ -15,3 +17,4 @@ gem 'dotenv-rails', '~> 2.0.0'
 gem 'font-awesome-rails', '~> 4.3.0.0'
 gem 'jquery-ui-rails', '~> 5.0.3'
 gem 'rails_12factor', group: :production
+gem 'puma'
