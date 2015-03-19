@@ -1,0 +1,50 @@
+javascript:
+  $(function() {
+    $("#tabs").tabs();
+  });
+
+#tabs
+  ul
+    - @data.each do |user, user_stats|
+      li
+        a href="##{user}"
+          = user
+  - @data.each do |user, user_stats|
+    - total_hours = 0
+    - total_spent = 0
+    - total_offhour = 0
+    - total_bugfix = 0
+    table id="#{user}"
+      tr
+        td.date
+          b Дата
+        td
+          b Факт
+        td
+          b Раб. вр.
+        td
+          b Внеур.
+        td
+          b Багфикс
+      - user_stats = user_stats.sort_by { |k, v| k }.to_h
+      - user_stats.each do |date, date_stats|
+        tr.stats
+          td
+            = date.strftime("%Y-%m-%d")
+          - total_hours += date_stats[0]
+          - total_spent += date_stats[1]
+          - total_offhour += date_stats[2]
+          - total_bugfix += date_stats[3]
+          - date_stats.each do |data|
+            td
+              = data
+      tr
+        td
+        td
+          = total_hours
+        td
+          = total_spent
+        td
+          = total_offhour
+        td
+          = total_bugfix

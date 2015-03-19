@@ -1,0 +1,46 @@
+data = Hash.new
+@rows.each do |row|
+  begin
+    desc_stat = desc_stat(row[:desc])
+    p desc_stat
+    desc_stat.each do |user, user_stat|
+      user_stat.each do |date, date_stat|
+        data[user] ||= {}
+        data[user][date] ||= []
+        data[user][date] << [date_stat[:spent] + date_stat[:bugfix] + date_stat[:offhour], date_stat[:spent], date_stat[:offhour], date_stat[:bugfix], row[:url]]
+      end
+    end
+  rescue
+    next
+  end
+end
+
+data.each do |user, user_data|
+  data[user] = data[user].sort
+end
+
+data = data.sort
+
+wb = xlsx_package.workbook
+
+data.each do |user, user_data|
+  wb.add_worksheet(name: user) do |sheet|
+    sheet.add_row ["Дата", "Раб. дн.", "Раб. час.", "План", "Факт", "w/bug", "w/o bug", "Раб. вр.", "Внеур.", "Bugfix", "Trello link"]
+    current_month = user_data[0][0].month
+    user_data.each do |date, date_data|
+      if current_month != date.month
+        sheet.add_row []
+        date_data.each do |data|
+          row = [date.strftime("%Y-%m-%d"), "", "", "", data[0], "", "", data[1], data[2], data[3], data[4]]
+          sheet.add_row row
+        end
+      else
+        date_data.each do |data|
+          row = [date.strftime("%Y-%m-%d"), "", "", "", data[0], "", "", data[1], data[2], data[3], data[4]]
+          sheet.add_row row
+        end
+      end
+      current_month = date.month
+    end
+  end
+end

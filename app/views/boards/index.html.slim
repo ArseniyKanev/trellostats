@@ -1,0 +1,6 @@
+h2 Boards
+
+- @boards.each do |board|
+    - if !board.closed
+      li.board
+        = link_to board.name, board_path(board.id)

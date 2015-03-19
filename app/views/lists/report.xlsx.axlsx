@@ -1,0 +1,13 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Отчет") do |sheet|
+  theme_prev = nil
+  @rows.each do |row|
+    theme = row[:theme]
+    row[:theme] = nil if theme == theme_prev
+    spent = row[:factor_time_spent] || row[:spent]
+    offhour = row[:factor_time_offhour] || row[:offhour]
+    sheet.add_row [row[:theme], row[:name], row[:estimated], spent + offhour, "", row[:url]]
+    theme_prev = theme
+  end
+end

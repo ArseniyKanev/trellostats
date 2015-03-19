@@ -1,0 +1,22 @@
+javascript:
+  $(document).ready(function() {
+    $('.show_cards').click(function() {
+      var checkedIds = $(":checkbox:checked").map(function() {
+        return this.id;
+      }).get();
+      if (checkedIds.length > 0) {
+        $.post('#{update_session_board_path}', { list_ids: checkedIds }, function(data) {
+          window.location = "#{lists_selected_path}"
+        });
+      }
+    });
+  });
+
+h2 = @board.name
+p
+  a.show_cards href="javascript:void(0);"
+    | Показать карточки
+- @lists.each do |list|
+  li.list
+    = check_box_tag list.id, "", false, class: 'checkbox'
+    = link_to list.name, list_path(list.id)
