@@ -48,7 +48,7 @@ class SessionsController < ApplicationController
       return_url: oauth_callback_url,
       callback: lambda {|request_token|
         session[:request_token] = Marshal.dump(request_token)
-        redirect_to "#{request_token.authorize_url}&name=Trellostat&expiration=never&scope=read,write"
+        redirect_to "#{request_token.authorize_url}&name=Trellostat&expiration=1day&scope=read,write"
       }
     )
   end
