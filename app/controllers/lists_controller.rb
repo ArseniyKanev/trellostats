@@ -109,7 +109,11 @@ class ListsController < ApplicationController
       factor_time_bugfix = factor_time[:bugfix]
       factor_time_offhour = factor_time[:offhour]
     end
+    estimated = parse_card_name(name)[:estimated]
     card_estimated_stat = checklists_estimated_stat(checklists)
+    if card_estimated_stat < estimated
+      card_estimated_stat = estimated
+    end
     name = build_name(card_stat, name, card_estimated_stat)
     parsed_name = parse_card_name(name)
     data = {
@@ -156,7 +160,7 @@ class ListsController < ApplicationController
       equality = check_hours_equality(parsed_name, desc, checklists)
       if equality
         card_estimated_stat = checklists_estimated_stat(checklists)
-        updatable = check_updatable(parsed_name, desc, checklists, card_estimated_stat)
+        updatable = check_updatable(parsed_name, desc, checklists, card_estimated_stat) || check_estimated_updatable(parsed_name, card_estimated_stat)
         if !updatable
           factor_time = factor_time(desc)
         end
