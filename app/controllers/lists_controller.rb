@@ -27,7 +27,8 @@ class ListsController < ApplicationController
   }
 
   FACTORS = {
-    '@arseniykanev' => 0.5
+    '@arseniykanev' => 0.5,
+    '@ksilenium' => 0.75
   }
 
   def show
