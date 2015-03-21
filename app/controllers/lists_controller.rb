@@ -369,10 +369,22 @@ class ListsController < ApplicationController
       date_stat.each do |member, hours|
         out += ' ' + member + ' ' + '['
         hours.each do |type, hour|
-          out += hour.to_s + '/'
+          if hour != 0
+            case type
+            when :spent
+              out += "%g" % ("%.2f" % hour)
+            when :bugfix
+              out += '/' + "%g" % ("%.2f" % hour)
+            when :offhour
+              if out[-1] == '['
+                out += "%g" % ("%.2f" % hour) + '^'
+              else
+                out += '/' + "%g" % ("%.2f" % hour) + '^'
+              end
+            end
+          end
         end
-        out = out[0...-1]
-        out += '^]'
+        out += ']'
       end
       out += "\n"
     end
@@ -390,16 +402,32 @@ class ListsController < ApplicationController
     total = total_card_stat(card_stat)
     if card_checklists_estimated > 0
       if name.match(estimated_and_hours)
-        name = name.gsub(name.match(estimated_and_hours).captures[0], "(#{card_checklists_estimated})")
-      else
+        name = name.gsub(name.match(estimated_and_hours).captures[0], "(" + "%g" % ("%.2f" % card_checklists_estimated) + ")")
+      elsif name.match(hours)
         hours_index = name.index(name.match(hours)[0])
-        name = name[0...hours_index] + "(#{card_checklists_estimated})"
+        name = name[0...hours_index] + "(" + "%g" % ("%.2f" % card_checklists_estimated) + ")"
+      else
+        name += " (" + "%g" % ("%.2f" % card_checklists_estimated) + ")"
       end
     end
     if name.match(hours)
       name = name[0...name.index(name.match(hours)[0]) - 1]
     end
-    name += ' [' + total[:spent].to_s + '/' + total[:bugfix].to_s + '/' + total[:offhour].to_s + '^]'
+    name += ' ['
+    if total[:spent] != 0
+      name += "%g" % ("%.2f" % total[:spent])
+    end
+    if total[:bugfix] != 0
+      name += '/'+ "%g" % ("%.2f" % total[:bugfix])
+    end
+    if total[:offhour] != 0
+      if name[-1] == '['
+        name += "%g" % ("%.2f" % total[:offhour]) + '^'
+      else
+        name += '/' + "%g" % ("%.2f" % total[:offhour]) + '^'
+      end
+    end
+    name += ']'
   end
 
   def check_for_hours(checklists)
