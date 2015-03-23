@@ -572,7 +572,7 @@ class ListsController < ApplicationController
         member_stat.each do |member, date_hours|
           card_stat[member] ||= {}
           date_hours.split.each_slice(2) do |day_hours|
-            date = Date.strptime(day_hours[0], '%d.%m')
+            date = nearest_date(day_hours[0])
             card_stat[member][date] ||= {}
             card_stat[member][date][:spent] ||= 0
             card_stat[member][date][:bugfix] ||= 0
@@ -591,7 +591,7 @@ class ListsController < ApplicationController
     card_stat = {}
     desc = DESC_RGX.match(desc)[0].split("\n")
     desc.each do |line|
-      date = Date.strptime(line.split[0], '%d.%m')
+      date = nearest_date(line.split[0])
       members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
       members_stat.each do |member_hours|
         member_hours[1].strip!
@@ -615,7 +615,7 @@ class ListsController < ApplicationController
         member_stat = item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).to_h
         member_stat.each do |member, date_hours|
           date_hours.split.each_slice(2) do |day_hours|
-            date = Date.strptime(day_hours[0], '%d.%m')
+            date = nearest_date(day_hours[0])
             card_stat[date] ||= {}
             card_stat[date][member] ||= {}
             card_stat[date][member][:spent] ||= 0
@@ -636,7 +636,7 @@ class ListsController < ApplicationController
     card_stat = {}
     desc = DESC_RGX.match(desc)[0].split("\n")
     desc.each do |line|
-      date = Date.strptime(line.split[0], '%d.%m')
+      date = nearest_date(line.split[0])
       members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
       members_stat.each do |member_hours|
         member_hours[1].strip!
@@ -688,6 +688,16 @@ class ListsController < ApplicationController
     else
       return [flag, "Ошибка в описании"]
     end
+  end
+
+  def nearest_date(str)
+    require 'date'
+    today = Date.today
+    date = Date.strptime(str, "%d.%m")
+    if today - date < 0 
+      date = Date.strptime(str + ".#{date.year - 1}", "%d.%m.%Y")
+    end
+    date
   end
 
 end

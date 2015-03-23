@@ -18,3 +18,9 @@ gem 'font-awesome-rails', '~> 4.3.0.0'
 gem 'jquery-ui-rails', '~> 5.0.3'
 gem 'rails_12factor', group: :production
 gem 'puma'
+
+group :development, :test do
+  gem 'guard'
+  gem 'guard-rspec', require: false
+  gem 'rspec-rails'
+end
