@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :trello_client, :trello_user, :system_user
   before_filter :authenticate
+  rescue_from NoMethodError do |e|
+    redirect_to login_url
+  end
 
   include ApplicationHelper
 
