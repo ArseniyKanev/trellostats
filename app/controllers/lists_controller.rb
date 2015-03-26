@@ -515,6 +515,8 @@ class ListsController < ApplicationController
       return total_card_stat(checklists_stat)[:spent] > parsed_name[:spent] ||\
              total_card_stat(checklists_stat)[:bugfix] > parsed_name[:bugfix] ||\
              total_card_stat(checklists_stat)[:offhour] > parsed_name[:offhour]
+    elsif checklists_stat.present? && !desc_stat.present?
+      return true
     elsif checklists_stat.present?
       return total_card_stat(checklists_stat)[:spent] > parsed_name[:spent] ||\
              total_card_stat(checklists_stat)[:bugfix] > parsed_name[:bugfix] ||\
