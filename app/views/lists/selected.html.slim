@@ -67,12 +67,12 @@ table
           i.fa.fa-refresh.fa-spin
       td id="estimated#{row[:id]}" class="estimated"
         = row[:estimated]
-      td.tooltip title="#{row[:factor_time_spent]}" id="spent#{row[:id]}" class="spent"
-        = row[:spent]
-      td.tooltip title="#{row[:factor_time_offhour]}" id="offhour#{row[:id]}" class="offhour"
-        = row[:offhour]
-      td.tooltip title="#{row[:factor_time_bugfix]}" id="bugfix#{row[:id]}" class="bugfix"
-        = row[:bugfix]
+      td.tooltip title="#{row[:spent]}" id="spent#{row[:id]}" class="spent"
+        = row[:factor_time_spent] || row[:spent]
+      td.tooltip title="#{row[:offhour]}" id="offhour#{row[:id]}" class="offhour"
+        = row[:factor_time_offhour] || row[:offhour]
+      td.tooltip title="#{row[:bugfix]}" id="bugfix#{row[:id]}" class="bugfix"
+        = row[:factor_time_bugfix] || row[:bugfix]
       td
         span id="upload#{row[:id]}" class="upload"
           i.fa.fa-upload

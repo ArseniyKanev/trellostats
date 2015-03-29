@@ -59,15 +59,15 @@ $(document).ready(function() {
             $("#upload_spinner" + id).hide();
             $("#card_name" + id).css('background', 'white');
             $("#estimated" + id).text(result.estimated);
-            $("#spent" + id).text(result.spent);
-            $("#offhour" + id).text(result.offhour);
-            $("#bugfix" + id).text(result.bugfix);
+            $("#spent" + id).text(result.factor_time_spent);
+            $("#offhour" + id).text(result.factor_time_offhour);
+            $("#bugfix" + id).text(result.factor_time_bugfix);
             $("#total_estimated").text(result.total_estimated);
             $("#total_work").text(result.total_work);
             $("#total_bugfix").text(result.total_bugfix);
-            $("#spent" + id).prop('title',  result.factor_time_spent);
-            $("#offhour" + id).prop('title',  result.factor_time_offhour);
-            $("#bugfix" + id).prop('title',  result.factor_time_bugfix);
+            $("#spent" + id).prop('title', result.spent);
+            $("#offhour" + id).prop('title', result.offhour);
+            $("#bugfix" + id).prop('title', result.bugfix);
             checkExclamation();
             checkSaveAll();
           }
@@ -95,15 +95,15 @@ $(document).ready(function() {
           $("#refresh_spinner" + id).hide();
           $("#refresh" + id).show();
           $("#estimated" + id).text(result.estimated);
-          $("#spent" + id).text(result.spent);
-          $("#offhour" + id).text(result.offhour);
-          $("#bugfix" + id).text(result.bugfix);
+          $("#spent" + id).text(result.factor_time_spent || result.spent);
+          $("#offhour" + id).text(result.factor_time_offhour || result.offhour);
+          $("#bugfix" + id).text(result.factor_time_bugfix || result.bugfix);
           $("#total_estimated").text(result.total_estimated);
           $("#total_work").text(result.total_work);
           $("#total_bugfix").text(result.total_bugfix);
-          $("#spent" + id).prop('title',  result.factor_time_spent);
-          $("#offhour" + id).prop('title',  result.factor_time_offhour);
-          $("#bugfix" + id).prop('title',  result.factor_time_bugfix);
+          $("#spent" + id).prop('title', result.spent);
+          $("#offhour" + id).prop('title', result.offhour);
+          $("#bugfix" + id).prop('title', result.bugfix);
           checkExclamation();
           checkSaveAll();
         }
@@ -127,15 +127,15 @@ $(document).ready(function() {
               $("#upload_spinner" + id).hide();
               $("#card_name" + id).css('background', 'white');
               $("#estimated" + id).text(result.estimated);
-              $("#spent" + id).text(result.spent);
-              $("#offhour" + id).text(result.offhour);
-              $("#bugfix" + id).text(result.bugfix);
+              $("#spent" + id).text(result.factor_time_spent);
+              $("#offhour" + id).text(result.factor_time_offhour);
+              $("#bugfix" + id).text(result.factor_time_bugfix);
               $("#total_estimated").text(result.total_estimated);
               $("#total_work").text(result.total_work);
               $("#total_bugfix").text(result.total_bugfix);
-              $("#spent" + id).prop('title',  result.factor_time_spent);
-              $("#offhour" + id).prop('title',  result.factor_time_offhour);
-              $("#bugfix" + id).prop('title',  result.factor_time_bugfix);
+              $("#spent" + id).prop('title', result.spent);
+              $("#offhour" + id).prop('title', result.offhour);
+              $("#bugfix" + id).prop('title', result.bugfix);
               checkExclamation();
             }
           });
