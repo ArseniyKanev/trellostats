@@ -40,6 +40,11 @@ $(document).ready(function() {
   }
   $(".card_name" ).each(function (){
     var id = $(this).data("id");
+    var total_work = $(this).data("totalwork");
+    var total_bugfix = $(this).data("totalbugfix");
+    var spent = $(this).data("spent");
+    var offhour = $(this).data("offhour");
+    var bugfix = $(this).data("bugfix");
     if ($(this).data("valid")[0] === false) { $(this).css('background', '#FF7070'); }
     if ($(this).data("equality") === false) { $(this).css('background', '#FFFF33'); }
     if ($(this).data("updatable") === true) {
@@ -54,7 +59,7 @@ $(document).ready(function() {
         $.ajax({
           url: '/lists/update_card/',
           type: 'GET',
-          data: { card_id: id },
+          data: { card_id: id, total_work: total_work, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
           success: function(result) {
             $("#upload_spinner" + id).hide();
             $("#card_name" + id).css('background', 'white');
@@ -80,7 +85,7 @@ $(document).ready(function() {
       $.ajax({
         url: '/lists/refresh_card/',
         type: 'GET',
-        data: { card_id: id },
+        data: { card_id: id, total_work: total_work, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
         success: function(result) {
           if (result.valid[0] === false) {
             $("#card_name" + id).css('background', '#FF7070');
@@ -115,13 +120,19 @@ $(document).ready(function() {
     if (answer) {
       $(".card_name").each(function() {
         var id = $(this).data("id");
+        var total_work = $(this).data("totalwork");
+        var total_bugfix = $(this).data("totalbugfix");
+        var spent = $(this).data("spent");
+        var offhour = $(this).data("offhour");
+        var bugfix = $(this).data("bugfix");
+        var id = $(this).data("id");
         if ($("#upload" + id).is(":visible")) {
           $("#upload" + id).hide();
           $("#upload_spinner" + id).show();
           $.ajax({
             url: '/lists/update_card/',
             type: 'GET',
-            data: { card_id: id },
+            data: { card_id: id, total_work: total_work, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
             success: function(result) {
               $("#upload_all").hide();
               $("#upload_spinner" + id).hide();

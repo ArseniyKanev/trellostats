@@ -48,7 +48,7 @@ table
     tr
       td.theme align="center"
         = row[:theme]
-      = content_tag :td, id: "card_name#{row[:id]}", class: "card_name", data: {valid: "#{row[:valid]}", id: "#{row[:id]}", equality: "#{row[:equality]}", updatable: "#{row[:updatable]}"} do
+      = content_tag :td, id: "card_name#{row[:id]}", class: "card_name", data: {totalwork: "#{@sum[:total_work]}", totalbugfix: "#{@sum[:total_bugfix]}", valid: "#{row[:valid]}", id: "#{row[:id]}", equality: "#{row[:equality]}", updatable: "#{row[:updatable]}", spent: "#{row[:factor_time_spent] || row[:spent]}", offhour: "#{row[:factor_time_offhour] || row[:offhour]}", bugfix: "#{row[:factor_time_bugfix] || row[:bugfix]}"} do
         .tooltip id="popup#{row[:id]}" title=""
           = link_to row[:name], row[:url]
       td

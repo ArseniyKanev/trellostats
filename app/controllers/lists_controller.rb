@@ -109,6 +109,11 @@ class ListsController < ApplicationController
       factor_time_spent = factor_time[:spent]
       factor_time_bugfix = factor_time[:bugfix]
       factor_time_offhour = factor_time[:offhour]
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + factor_time_spent + factor_time_offhour
+      total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + factor_time_bugfix
+    else
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + parsed_name[:spent] + parsed_name[:offhour]
+      total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + parsed_name[:bugfix]
     end
     estimated = parse_card_name(name)[:estimated]
     card_estimated_stat = checklists_estimated_stat(checklists)
@@ -128,14 +133,10 @@ class ListsController < ApplicationController
     cards = @list.cards
     threads = []
     total_estimated = 0
-    total_work = 0
-    total_bugfix = 0
     cards.each do |card|
       threads << Thread.new do
         parsed_name = parse_card_name(card.name)
         total_estimated += parsed_name[:estimated]
-        total_work += parsed_name[:spent] + parsed_name[:offhour]
-        total_bugfix += parsed_name[:bugfix]
       end
     end
     threads.each { |t| t.join }
@@ -150,11 +151,13 @@ class ListsController < ApplicationController
 
   def refresh_card
     card = trello_client.find(:card, params[:card_id])
+    p params[:spent]
     @board = trello_client.find(:board, card.board_id)
     @members = @board.members.map { |member| '@' + member.username }
     @list = trello_client.find(:list, card.list_id)
     name, desc, checklists = card.name, card.desc, card.checklists
     parsed_name = parse_card_name(name)
+
     equality, updatable, factor_time = nil, nil, nil
     valid = check_validity(checklists, desc)
     if valid[0]
@@ -175,25 +178,26 @@ class ListsController < ApplicationController
     }
     card.name = name
     card.save
-    cards = @list.cards
-    threads = []
-    total_estimated = 0
-    total_work = 0
-    total_bugfix = 0
-    cards.each do |card|
-      threads << Thread.new do
-        parsed_name = parse_card_name(card.name)
-        total_estimated += parsed_name[:estimated]
-        total_work += parsed_name[:spent] + parsed_name[:offhour]
-        total_bugfix += parsed_name[:bugfix]
-      end
-    end
-    threads.each { |t| t.join }
     if factor_time
       factor_time_spent = factor_time[:spent]
       factor_time_bugfix = factor_time[:bugfix]
       factor_time_offhour = factor_time[:offhour]
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + factor_time_spent + factor_time_offhour
+      total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + factor_time_bugfix
+    else
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + parsed_name[:spent] + parsed_name[:offhour]
+      total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + parsed_name[:bugfix]
     end
+    cards = @list.cards
+    threads = []
+    total_estimated = 0
+    cards.each do |card|
+      threads << Thread.new do
+        parsed_name = parse_card_name(card.name)
+        total_estimated += parsed_name[:estimated]
+      end
+    end
+    threads.each { |t| t.join }
     data['total_estimated'] = total_estimated
     data['total_work'] = total_work
     data['total_bugfix'] = total_bugfix
@@ -254,8 +258,6 @@ class ListsController < ApplicationController
         threads << Thread.new do
           parsed_name = parse_card_name(card.name)
           total_estimated += parsed_name[:estimated]
-          total_work += parsed_name[:spent] + parsed_name[:offhour]
-          total_bugfix += parsed_name[:bugfix]
           checklists = card.checklists
           desc = card.desc
           valid = check_validity(checklists, desc)
@@ -274,6 +276,11 @@ class ListsController < ApplicationController
             factor_time_spent = factor_time[:spent]
             factor_time_bugfix = factor_time[:bugfix]
             factor_time_offhour = factor_time[:offhour]
+            total_work += factor_time_spent + factor_time_offhour
+            total_bugfix += factor_time_bugfix
+          else
+            total_work += parsed_name[:spent] + parsed_name[:offhour]
+            total_bugfix += parsed_name[:bugfix]
           end
           @rows << {
             id: card.id,
@@ -294,7 +301,7 @@ class ListsController < ApplicationController
             list_pos: list.pos,
             factor_time_spent: factor_time_spent,
             factor_time_bugfix: factor_time_bugfix,
-            factor_time_offhour: factor_time_offhour
+            factor_time_offhour: factor_time_offhour,
           }
         end
       end
@@ -361,7 +368,6 @@ class ListsController < ApplicationController
       [hours[0].to_f, hours[1].to_f, hours[2][0...-1].to_f]
     end
   end
-
 
   def build_desc(card_stat, desc)
     out = ""
