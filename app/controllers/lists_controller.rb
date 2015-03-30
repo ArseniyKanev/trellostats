@@ -3,6 +3,7 @@ class ListsController < ApplicationController
   helper_method :desc_stat
 
   CARD_NAME_RGX = /\A\s*(.*?>)?\s?(.*?)\s?(\([\d\-\^\.\/]+\))?\s*(\[[\d\/\-\.\^]+\])?\s*\z/
+  TIME_SLICE = 31
 
   THEMES = {
     anketa:     'Анкета',
@@ -706,7 +707,7 @@ class ListsController < ApplicationController
     today = Date.today
     date = Date.strptime(str, "%d.%m")
     if today - date < 0
-      if date - today < 31
+      if date - today < TIME_SLICE
         date = Date.strptime(str + ".#{date.year}", "%d.%m.%Y")
       else
         date = Date.strptime(str + ".#{date.year - 1}", "%d.%m.%Y")
