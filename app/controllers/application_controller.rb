@@ -7,6 +7,9 @@ class ApplicationController < ActionController::Base
   rescue_from NoMethodError do |e|
     redirect_to login_url
   end
+  rescue_from Trello::InvalidAccessToken do |e|
+    redirect_to login_url
+  end
 
   include ApplicationHelper
 
