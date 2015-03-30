@@ -705,8 +705,12 @@ class ListsController < ApplicationController
     require 'date'
     today = Date.today
     date = Date.strptime(str, "%d.%m")
-    if today - date < 0 
-      date = Date.strptime(str + ".#{date.year - 1}", "%d.%m.%Y")
+    if today - date < 0
+      if date - today < 31
+        date = Date.strptime(str + ".#{date.year}", "%d.%m.%Y")
+      else
+        date = Date.strptime(str + ".#{date.year - 1}", "%d.%m.%Y")
+      end
     end
     date
   end
