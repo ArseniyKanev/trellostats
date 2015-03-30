@@ -2,7 +2,7 @@ class ListsController < ApplicationController
 
   helper_method :desc_stat
 
-  CARD_NAME_RGX = /\A(.*?>)?\s?(.*?)\s?(\([\d\-\^\.\/]+\))?\s*(\[[\d\/\-\.\^]+\])?\z/
+  CARD_NAME_RGX = /\A\s*(.*?>)?\s?(.*?)\s?(\([\d\-\^\.\/]+\))?\s*(\[[\d\/\-\.\^]+\])?\s*\z/
 
   THEMES = {
     anketa:     'Анкета',
@@ -398,6 +398,7 @@ class ListsController < ApplicationController
   end
 
   def build_name(card_stat, name, card_checklists_estimated)
+    estimated = /(\(\d*\.?\d*\))\s*/
     estimated_and_hours = /(\(\d*\.?\d*\))\s*\[[\/\d\.\-\^]*\]/
     hours = /\[[\/\d\.\-\^]*\]/
     total = total_card_stat(card_stat)
@@ -407,6 +408,8 @@ class ListsController < ApplicationController
       elsif name.match(hours)
         hours_index = name.index(name.match(hours)[0])
         name = name[0...hours_index] + "(" + "%g" % ("%.2f" % card_checklists_estimated) + ")"
+      elsif name.match(estimated)
+        name = name.gsub(name.match(estimated).captures[0], "(" + "%g" % ("%.2f" % card_checklists_estimated) + ")")
       else
         name += " (" + "%g" % ("%.2f" % card_checklists_estimated) + ")"
       end
@@ -414,21 +417,21 @@ class ListsController < ApplicationController
     if name.match(hours)
       name = name[0...name.index(name.match(hours)[0]) - 1]
     end
-    name += ' ['
+    name += " ["
     if total[:spent] != 0
       name += "%g" % ("%.2f" % total[:spent])
     end
     if total[:bugfix] != 0
-      name += '/'+ "%g" % ("%.2f" % total[:bugfix])
+      name += "/"+ "%g" % ("%.2f" % total[:bugfix])
     end
     if total[:offhour] != 0
       if name[-1] == '['
-        name += "%g" % ("%.2f" % total[:offhour]) + '^'
+        name += "%g" % ("%.2f" % total[:offhour]) + "^"
       else
-        name += '/' + "%g" % ("%.2f" % total[:offhour]) + '^'
+        name += "/" + "%g" % ("%.2f" % total[:offhour]) + "^"
       end
     end
-    name += ']'
+    name += "]"
   end
 
   def check_for_hours(checklists)
