@@ -398,7 +398,7 @@ class ListsController < ApplicationController
   end
 
   def build_name(card_stat, name, card_checklists_estimated)
-    estimated = /(\(\d*\.?\d*\))\s*/
+    estimated = /(\(\d*\.?\d*\))\s*\z/
     estimated_and_hours = /(\(\d*\.?\d*\))\s*\[[\/\d\.\-\^]*\]/
     hours = /\[[\/\d\.\-\^]*\]/
     total = total_card_stat(card_stat)
