@@ -678,7 +678,7 @@ class ListsController < ApplicationController
     flag = false
     desc = desc.split("\n")
     flag = true if desc.size >= 0
-    hours = /\[[\/\d\.\-\^]*\]/
+    hours = /(#{@members.join('|')})\s*\[[\/\d\.\-\^]*\]/
     members = /\@(\w+)\s+\[[\/\d\.\-\^]*\]/
     desc.each do |line|
       if line.match(hours)
