@@ -66,6 +66,7 @@ class ListsController < ApplicationController
       single_list
     end
     get_data
+    @rows.sort_by! { |row| row[:theme] }
   end
 
   def stats
