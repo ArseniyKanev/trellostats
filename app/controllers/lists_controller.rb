@@ -6,12 +6,16 @@ class ListsController < ApplicationController
   TIME_SLICE = 31
 
   THEMES = {
+    account:    'Аккаунт-менеджер',
+    analyze:    'Анализ',
     anketa:     'Анкета',
+    api:        'API',
     appcraft:   'AppCraft',
     auth:       'Авторизация',
     core:       'CoreCRM',
     doc:        'Документация',
     export:     'Экспорт/подача заявки',
+    feed:       'Лента проекта',
     improve:    'Улучшения',
     hosting:    'Хостинг',
     layout:     'Верстка',
@@ -319,7 +323,7 @@ class ListsController < ApplicationController
   def parse_card_name(name)
     theme, name, estimated, hours = name.match(CARD_NAME_RGX).captures
     if theme
-      theme = THEMES[theme[0...-1].to_sym] || 'Unknown'
+      theme = THEMES[theme[0...-1].to_sym] || 'UNKNOWN'
     else
       theme = "\u2014"
     end
