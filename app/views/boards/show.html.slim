@@ -1,5 +1,6 @@
 javascript:
   $(document).ready(function() {
+    $(":checkbox:checked").prop('checked', false);
     $('.show_cards').click(function() {
       var checkedIds = $(":checkbox:checked").map(function() {
         return this.id;

@@ -606,7 +606,7 @@ class ListsController < ApplicationController
 
   def desc_stat(desc)
     card_stat = {}
-    desc = DESC_RGX.match(desc)[0].split("\n")
+    desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
     desc.each do |line|
       date = nearest_date(line.split[0])
       members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
@@ -651,7 +651,7 @@ class ListsController < ApplicationController
 
   def desc_stat_by_date(desc)
     card_stat = {}
-    desc = DESC_RGX.match(desc)[0].split("\n")
+    desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
     desc.each do |line|
       date = nearest_date(line.split[0])
       members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
