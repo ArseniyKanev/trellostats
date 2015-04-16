@@ -1,81 +1,84 @@
-title
-  - @lists.each do |list|
-    = list.name
+- if @rows.empty?
+  h3 В списке нет карточек
+- else
+  title
+    - @lists.each do |list|
+      = list.name
 
-table
-  tr
-    td 
-      = link_to stats_list_path
-        span.stats_web
-          i.fa.fa-table
-      .tooltip title="Командная статистика"
-        = link_to stats_list_path(format: :xlsx)
-          span.stats_xls
-            i.fa.fa-file-excel-o
-      .tooltip title="Отчёт"
-        = link_to report_list_path(format: :xlsx)
-          span.report_xls
-            i.fa.fa-file-excel-o
-      span.exclamation
-        i.fa.fa-exclamation
-    td
-    td
-    td
-    td
-    td
-    td
-    td id="upload_all"
-      i.fa.fa-upload
-  tr
-    td align="center"
-      b Тема
-    td
-      b Название карточки
-    td
-    td
-      b Оценка
-    td
-      b Рабочее
-    td
-      b Внеур
-    td
-      b Багфикс
-  tr
-    td
-    td align="center"
-      b = @rows[0][:list_name]
-  - @rows.each do |row|
+  table
     tr
-      td.theme align="center"
-        = row[:theme]
-      = content_tag :td, id: "card_name#{row[:id]}", class: "card_name", data: {totalwork: "#{@sum[:total_work]}", totalbugfix: "#{@sum[:total_bugfix]}", valid: "#{row[:valid]}", id: "#{row[:id]}", equality: "#{row[:equality]}", updatable: "#{row[:updatable]}", spent: "#{row[:factor_time_spent] || row[:spent]}", offhour: "#{row[:factor_time_offhour] || row[:offhour]}", bugfix: "#{row[:factor_time_bugfix] || row[:bugfix]}"} do
-        .tooltip id="popup#{row[:id]}" title=""
-          = link_to row[:name], row[:url]
+      td 
+        = link_to stats_list_path
+          span.stats_web
+            i.fa.fa-table
+        .tooltip title="Командная статистика"
+          = link_to stats_list_path(format: :xlsx)
+            span.stats_xls
+              i.fa.fa-file-excel-o
+        .tooltip title="Отчёт"
+          = link_to report_list_path(format: :xlsx)
+            span.report_xls
+              i.fa.fa-file-excel-o
+        span.exclamation
+          i.fa.fa-exclamation
       td
-        span id="refresh#{row[:id]}" class="refresh"
-          i.fa.fa-refresh
-        span id="refresh_spinner#{row[:id]}" class="refresh_spinner"
-          i.fa.fa-refresh.fa-spin
-      td id="estimated#{row[:id]}" class="estimated"
-        = row[:estimated]
-      td.tooltip title="#{row[:spent]}" id="spent#{row[:id]}" class="spent"
-        = row[:factor_time_spent] || row[:spent]
-      td.tooltip title="#{row[:offhour]}" id="offhour#{row[:id]}" class="offhour"
-        = row[:factor_time_offhour] || row[:offhour]
-      td.tooltip title="#{row[:bugfix]}" id="bugfix#{row[:id]}" class="bugfix"
-        = row[:factor_time_bugfix] || row[:bugfix]
       td
-        span id="upload#{row[:id]}" class="upload"
-          i.fa.fa-upload
-        span id="upload_spinner#{row[:id]}" class="upload_spinner"
-          i.fa.fa-refresh.fa-spin
-  tr
-    td
-    td
-    td
-    td id="total_estimated"
-      = @sum[:total_estimated]
-    td id="total_work" colspan="2" align="center"
-      = @sum[:total_work]
-    td id="total_bugfix"
-      = @sum[:total_bugfix]
+      td
+      td
+      td
+      td
+      td id="upload_all"
+        i.fa.fa-upload
+    tr
+      td align="center"
+        b Тема
+      td
+        b Название карточки
+      td
+      td
+        b Оценка
+      td
+        b Рабочее
+      td
+        b Внеур
+      td
+        b Багфикс
+    tr
+      td
+      td align="center"
+        b = @rows[0][:list_name]
+    - @rows.each do |row|
+      tr
+        td.theme align="center"
+          = row[:theme]
+        = content_tag :td, id: "card_name#{row[:id]}", class: "card_name", data: {totalwork: "#{@sum[:total_work]}", totalbugfix: "#{@sum[:total_bugfix]}", valid: "#{row[:valid]}", id: "#{row[:id]}", equality: "#{row[:equality]}", updatable: "#{row[:updatable]}", spent: "#{row[:factor_time_spent] || row[:spent]}", offhour: "#{row[:factor_time_offhour] || row[:offhour]}", bugfix: "#{row[:factor_time_bugfix] || row[:bugfix]}"} do
+          .tooltip id="popup#{row[:id]}" title=""
+            = link_to row[:name], row[:url]
+        td
+          span id="refresh#{row[:id]}" class="refresh"
+            i.fa.fa-refresh
+          span id="refresh_spinner#{row[:id]}" class="refresh_spinner"
+            i.fa.fa-refresh.fa-spin
+        td id="estimated#{row[:id]}" class="estimated"
+          = row[:estimated]
+        td.tooltip title="#{row[:spent]}" id="spent#{row[:id]}" class="spent"
+          = row[:factor_time_spent] || row[:spent]
+        td.tooltip title="#{row[:offhour]}" id="offhour#{row[:id]}" class="offhour"
+          = row[:factor_time_offhour] || row[:offhour]
+        td.tooltip title="#{row[:bugfix]}" id="bugfix#{row[:id]}" class="bugfix"
+          = row[:factor_time_bugfix] || row[:bugfix]
+        td
+          span id="upload#{row[:id]}" class="upload"
+            i.fa.fa-upload
+          span id="upload_spinner#{row[:id]}" class="upload_spinner"
+            i.fa.fa-refresh.fa-spin
+    tr
+      td
+      td
+      td
+      td id="total_estimated"
+        = @sum[:total_estimated]
+      td id="total_work" colspan="2" align="center"
+        = @sum[:total_work]
+      td id="total_bugfix"
+        = @sum[:total_bugfix]
