@@ -35,7 +35,7 @@ RSpec.describe ListsController, type: :controller do
       name = "  theme > Карточка с одним временем   [3]         "
       expect(controller.instance_eval { parse_card_name(name) } ).to eq ({
         hours: "3",
-        theme: "Unknown",
+        theme: "UNKNOWN",
         name: "Карточка с одним временем",
         spent: 3.0,
         bugfix: 0,

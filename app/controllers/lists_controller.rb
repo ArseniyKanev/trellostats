@@ -157,7 +157,6 @@ class ListsController < ApplicationController
 
   def refresh_card
     card = trello_client.find(:card, params[:card_id])
-    p params[:spent]
     @board = trello_client.find(:board, card.board_id)
     @members = @board.members.map { |member| '@' + member.username }
     @list = trello_client.find(:list, card.list_id)
@@ -252,7 +251,7 @@ class ListsController < ApplicationController
   end
 
   def get_data
-    Object.const_set("CHECKLIST_ITEM_NAME_RGX", /\A((?!(\d+\.\d+\s+\[\S+\]\s*)).)*((#{@members.join('|')})\s+(\d+\.\d+\s+\[\S+\]\s*)+)+\z/)
+    Object.const_set("CHECKLIST_ITEM_NAME_RGX", /\A((?!(#{@members.join('|')}\s+\d+\.\d+\s+\[\S+\]\s*)).)*((#{@members.join('|')})\s+(\d+\.\d+\s+\[\S+\]\s*)+)+\z/)
     Object.const_set("DESC_RGX", /(^(\d+\.\d+\s*((#{@members.join('|')})\s*\[\S*\]\s*)+)+)$/)
     @rows = []
     threads = []
@@ -585,18 +584,20 @@ class ListsController < ApplicationController
     card_stat = {}
     checklists.each do |checklist|
       checklist.items.each do |item|
-        member_stat = item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).to_h
-        member_stat.each do |member, date_hours|
-          card_stat[member] ||= {}
-          date_hours.split.each_slice(2) do |day_hours|
-            date = nearest_date(day_hours[0])
-            card_stat[member][date] ||= {}
-            card_stat[member][date][:spent] ||= 0
-            card_stat[member][date][:bugfix] ||= 0
-            card_stat[member][date][:offhour] ||= 0
-            card_stat[member][date][:spent] += parse_hours(day_hours[1][1...-1])[0]
-            card_stat[member][date][:bugfix] += parse_hours(day_hours[1][1...-1])[1]
-            card_stat[member][date][:offhour] += parse_hours(day_hours[1][1...-1]).last
+        item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).each do |e|
+          member_stat = [e].to_h
+          member_stat.each do |member, date_hours|
+            card_stat[member] ||= {}
+            date_hours.split.each_slice(2) do |day_hours|
+              date = nearest_date(day_hours[0])
+              card_stat[member][date] ||= {}
+              card_stat[member][date][:spent] ||= 0
+              card_stat[member][date][:bugfix] ||= 0
+              card_stat[member][date][:offhour] ||= 0
+              card_stat[member][date][:spent] += parse_hours(day_hours[1][1...-1])[0]
+              card_stat[member][date][:bugfix] += parse_hours(day_hours[1][1...-1])[1]
+              card_stat[member][date][:offhour] += parse_hours(day_hours[1][1...-1]).last
+            end
           end
         end
       end
@@ -629,18 +630,20 @@ class ListsController < ApplicationController
     card_stat = {}
     checklists.each do |checklist|
       checklist.items.each do |item|
-        member_stat = item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).to_h
-        member_stat.each do |member, date_hours|
-          date_hours.split.each_slice(2) do |day_hours|
-            date = nearest_date(day_hours[0])
-            card_stat[date] ||= {}
-            card_stat[date][member] ||= {}
-            card_stat[date][member][:spent] ||= 0
-            card_stat[date][member][:bugfix] ||= 0
-            card_stat[date][member][:offhour] ||= 0
-            card_stat[date][member][:spent] += parse_hours(day_hours[1][1...-1])[0]
-            card_stat[date][member][:bugfix] += parse_hours(day_hours[1][1...-1])[1]
-            card_stat[date][member][:offhour] += parse_hours(day_hours[1][1...-1]).last
+        item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).each do |e|
+          member_stat = [e].to_h
+          member_stat.each do |member, date_hours|
+            date_hours.split.each_slice(2) do |day_hours|
+              date = nearest_date(day_hours[0])
+              card_stat[date] ||= {}
+              card_stat[date][member] ||= {}
+              card_stat[date][member][:spent] ||= 0
+              card_stat[date][member][:bugfix] ||= 0
+              card_stat[date][member][:offhour] ||= 0
+              card_stat[date][member][:spent] += parse_hours(day_hours[1][1...-1])[0]
+              card_stat[date][member][:bugfix] += parse_hours(day_hours[1][1...-1])[1]
+              card_stat[date][member][:offhour] += parse_hours(day_hours[1][1...-1]).last
+            end
           end
         end
       end
