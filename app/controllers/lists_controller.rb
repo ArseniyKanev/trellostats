@@ -24,6 +24,7 @@ class ListsController < ApplicationController
     recommend:  'Рекомендации',
     small:      'Мелкие улучшения',
     stats:      'Статистика',
+    support:    'Поддержка',
     tracking:   'Трекинг проектов',
     trellostat: 'Треллостат',
     triggers:   'Триггерная рассылка',
@@ -277,7 +278,7 @@ class ListsController < ApplicationController
               end
             end
           end
-          if factor_time
+          if factor_time.present?
             factor_time_spent = factor_time[:spent]
             factor_time_bugfix = factor_time[:bugfix]
             factor_time_offhour = factor_time[:offhour]
@@ -510,7 +511,7 @@ class ListsController < ApplicationController
     rescue
     end
 
-    if checklists_stat.present? && desc_stat.present?
+    if checklists_stat.values.any?{ |v| v.present? } && desc_stat.present?
       checklists_stat.each do |member, member_stat|
         if desc_stat.include?(member)
           member_stat.each do |date, date_stat|
@@ -529,9 +530,9 @@ class ListsController < ApplicationController
       return total_card_stat(checklists_stat)[:spent] > parsed_name[:spent] ||\
              total_card_stat(checklists_stat)[:bugfix] > parsed_name[:bugfix] ||\
              total_card_stat(checklists_stat)[:offhour] > parsed_name[:offhour]
-    elsif checklists_stat.present? && !desc_stat.present?
+    elsif checklists_stat.values.any?{ |v| v.present? } && !desc_stat.present?
       return true
-    elsif checklists_stat.present?
+    elsif checklists_stat.values.any?{ |v| v.present? }
       return total_card_stat(checklists_stat)[:spent] > parsed_name[:spent] ||\
              total_card_stat(checklists_stat)[:bugfix] > parsed_name[:bugfix] ||\
              total_card_stat(checklists_stat)[:offhour] > parsed_name[:offhour]
@@ -607,20 +608,22 @@ class ListsController < ApplicationController
 
   def desc_stat(desc)
     card_stat = {}
-    desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
-    desc.each do |line|
-      date = nearest_date(line.split[0])
-      members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
-      members_stat.each do |member_hours|
-        member_hours[1].strip!
-        card_stat[member_hours[0]] ||= {}
-        card_stat[member_hours[0]][date] ||= {}
-        card_stat[member_hours[0]][date][:spent] ||= 0
-        card_stat[member_hours[0]][date][:bugfix] ||= 0
-        card_stat[member_hours[0]][date][:offhour] ||= 0
-        card_stat[member_hours[0]][date][:spent] += parse_hours(member_hours[1][1...-1])[0]
-        card_stat[member_hours[0]][date][:bugfix] += parse_hours(member_hours[1][1...-1])[1]
-        card_stat[member_hours[0]][date][:offhour] += parse_hours(member_hours[1][1...-1]).last
+    if desc.include?("~~~")
+      desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
+      desc.each do |line|
+        date = nearest_date(line.split[0])
+        members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
+        members_stat.each do |member_hours|
+          member_hours[1].strip!
+          card_stat[member_hours[0]] ||= {}
+          card_stat[member_hours[0]][date] ||= {}
+          card_stat[member_hours[0]][date][:spent] ||= 0
+          card_stat[member_hours[0]][date][:bugfix] ||= 0
+          card_stat[member_hours[0]][date][:offhour] ||= 0
+          card_stat[member_hours[0]][date][:spent] += parse_hours(member_hours[1][1...-1])[0]
+          card_stat[member_hours[0]][date][:bugfix] += parse_hours(member_hours[1][1...-1])[1]
+          card_stat[member_hours[0]][date][:offhour] += parse_hours(member_hours[1][1...-1]).last
+        end
       end
     end
     card_stat
@@ -654,20 +657,22 @@ class ListsController < ApplicationController
 
   def desc_stat_by_date(desc)
     card_stat = {}
-    desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
-    desc.each do |line|
-      date = nearest_date(line.split[0])
-      members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
-      members_stat.each do |member_hours|
-        member_hours[1].strip!
-        card_stat[date] ||= {}
-        card_stat[date][member_hours[0]] ||= {}
-        card_stat[date][member_hours[0]][:spent] ||= 0
-        card_stat[date][member_hours[0]][:bugfix] ||= 0
-        card_stat[date][member_hours[0]][:offhour] ||= 0
-        card_stat[date][member_hours[0]][:spent] += parse_hours(member_hours[1][1...-1])[0]
-        card_stat[date][member_hours[0]][:bugfix] += parse_hours(member_hours[1][1...-1])[1]
-        card_stat[date][member_hours[0]][:offhour] += parse_hours(member_hours[1][1...-1]).last
+    if desc.include?("~~~")
+      desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
+      desc.each do |line|
+        date = nearest_date(line.split[0])
+        members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
+        members_stat.each do |member_hours|
+          member_hours[1].strip!
+          card_stat[date] ||= {}
+          card_stat[date][member_hours[0]] ||= {}
+          card_stat[date][member_hours[0]][:spent] ||= 0
+          card_stat[date][member_hours[0]][:bugfix] ||= 0
+          card_stat[date][member_hours[0]][:offhour] ||= 0
+          card_stat[date][member_hours[0]][:spent] += parse_hours(member_hours[1][1...-1])[0]
+          card_stat[date][member_hours[0]][:bugfix] += parse_hours(member_hours[1][1...-1])[1]
+          card_stat[date][member_hours[0]][:offhour] += parse_hours(member_hours[1][1...-1]).last
+        end
       end
     end
     card_stat
