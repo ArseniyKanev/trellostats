@@ -479,10 +479,14 @@ class ListsController < ApplicationController
                  date_stat[:offhour] > checklists_stat[member][date][:offhour]
                   return false
               end
+            elsif !checklists_stat.values.any?{ |v| v.present? }
+              return true
             else
               return false
             end
           end
+        elsif !checklists_stat.values.any?{ |v| v.present? }
+          return true
         else
           return false
         end
@@ -511,7 +515,7 @@ class ListsController < ApplicationController
     rescue
     end
 
-    if checklists_stat.values.any?{ |v| v.present? } && desc_stat.present?
+    if checklists_stat && checklists_stat.values.any?{ |v| v.present? } && desc_stat.present?
       checklists_stat.each do |member, member_stat|
         if desc_stat.include?(member)
           member_stat.each do |date, date_stat|
@@ -530,9 +534,9 @@ class ListsController < ApplicationController
       return total_card_stat(checklists_stat)[:spent] > parsed_name[:spent] ||\
              total_card_stat(checklists_stat)[:bugfix] > parsed_name[:bugfix] ||\
              total_card_stat(checklists_stat)[:offhour] > parsed_name[:offhour]
-    elsif checklists_stat.values.any?{ |v| v.present? } && !desc_stat.present?
+    elsif checklists_stat && checklists_stat.values.any?{ |v| v.present? } && !desc_stat.present?
       return true
-    elsif checklists_stat.values.any?{ |v| v.present? }
+    elsif checklists_stat && checklists_stat.values.any?{ |v| v.present? }
       return total_card_stat(checklists_stat)[:spent] > parsed_name[:spent] ||\
              total_card_stat(checklists_stat)[:bugfix] > parsed_name[:bugfix] ||\
              total_card_stat(checklists_stat)[:offhour] > parsed_name[:offhour]
