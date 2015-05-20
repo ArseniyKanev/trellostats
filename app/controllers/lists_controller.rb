@@ -589,7 +589,7 @@ class ListsController < ApplicationController
     card_stat = {}
     checklists.each do |checklist|
       checklist.items.each do |item|
-        if item.name =~ /\d+\.\d+/ || item.name =~ /\[\S+\]/ && item.name.scan(/(#{@members.join('|')})\s*([^@]+)/)
+        if item.name =~ /\[\S+\]/ && item.name.scan(/(#{@members.join('|')})\s*([^@]+)/)
           item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).each do |e|
             member_stat = [e].to_h
             member_stat.each do |member, date_hours|
@@ -639,7 +639,7 @@ class ListsController < ApplicationController
     card_stat = {}
     checklists.each do |checklist|
       checklist.items.each do |item|
-        if item.name =~ /\d+\.\d+/ || item.name =~ /\[\S+\]/ && item.name.scan(/(#{@members.join('|')})\s*([^@]+)/)
+        if item.name =~ /\[\S+\]/ && item.name.scan(/(#{@members.join('|')})\s*([^@]+)/)
           item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).each do |e|
             member_stat = [e].to_h
             member_stat.each do |member, date_hours|
