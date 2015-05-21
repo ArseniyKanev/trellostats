@@ -7,12 +7,13 @@ wb.add_worksheet(name: "Отчет") do |sheet|
     row[:theme] = nil if theme == theme_prev
     spent = row[:factor_time_spent] || row[:spent]
     offhour = row[:factor_time_offhour] || row[:offhour]
+    bugfix = row[:factor_time_bugfix] || row[:bugfix]
     if row[:estimated] > 0
       estimated = row[:estimated]
     else
       estimated = nil
     end
-    sheet.add_row [row[:theme], row[:name], estimated, spent + offhour, "", row[:url]]
+    sheet.add_row [row[:theme], row[:name], estimated, spent + offhour + bugfix, "", row[:url]]
     theme_prev = theme
   end
 end
