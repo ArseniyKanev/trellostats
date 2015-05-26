@@ -26,6 +26,7 @@ class ListsController < ApplicationController
     stats:      'Статистика',
     support:    'Поддержка',
     tracking:   'Трекинг проектов',
+    trello:     'Таск-трекер',
     trellostat: 'Треллостат',
     triggers:   'Триггерная рассылка',
     users:      'Пользователи',
@@ -34,7 +35,9 @@ class ListsController < ApplicationController
 
   FACTORS = {
     '@arseniykanev' => 0.5,
-    '@ksilenium' => 0.75
+    '@ksilenium' => 0.75,
+    '@vaskovans' => 0.5,
+    '@pavelpashkevich' => 0.75
   }
 
   def show
