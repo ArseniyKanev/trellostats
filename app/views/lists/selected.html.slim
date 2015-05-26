@@ -9,7 +9,7 @@
 
   table
     tr
-      td 
+      td
         = link_to lists_selected_stats_path
           span.stats_web
             i.fa.fa-table
@@ -60,7 +60,7 @@
       tr
         td.theme align="center"
           = row[:theme]
-        = content_tag :td, id: "card_name#{row[:id]}", class: "card_name", data: {totalwork: "#{@sum[:total_work]}", totalbugfix: "#{@sum[:total_bugfix]}", valid: "#{row[:valid]}", id: "#{row[:id]}", equality: "#{row[:equality]}", updatable: "#{row[:updatable]}", spent: "#{row[:factor_time_spent] || row[:spent]}", offhour: "#{row[:factor_time_offhour] || row[:offhour]}", bugfix: "#{row[:factor_time_bugfix] || row[:bugfix]}"} do
+        = content_tag :td, id: "card_name#{row[:id]}", class: "card_name", data: {totalwork: "#{@sum[:total_work]}",totalspent: "#{@sum[:total_spent]}",totaloffhour: "#{@sum[:total_offhour]}" , totalbugfix: "#{@sum[:total_bugfix]}", valid: "#{row[:valid]}", id: "#{row[:id]}", equality: "#{row[:equality]}", updatable: "#{row[:updatable]}", spent: "#{row[:factor_time_spent] || row[:spent]}", offhour: "#{row[:factor_time_offhour] || row[:offhour]}", bugfix: "#{row[:factor_time_bugfix] || row[:bugfix]}"} do
           .tooltip id="popup#{row[:id]}" title=""
             = link_to row[:name], row[:url]
         td
@@ -87,7 +87,15 @@
       td
       td id="total_estimated"
         = @sum[:total_estimated]
-      td id="total_work" colspan="2" align="center"
-        = @sum[:total_work]
+      td id="total_spent"
+        = @sum[:total_spent]
+      td id="total_offhour"
+        = @sum[:total_offhour]
       td id="total_bugfix"
         = @sum[:total_bugfix]
+    tr
+      td
+      td
+      td
+      td id="total_work" colspan="4" align="center"
+        = @sum[:total_work]

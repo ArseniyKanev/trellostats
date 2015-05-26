@@ -33,14 +33,17 @@ $(document).ready(function() {
     if (valid) {
       $(".exclamation").show();
       $(".exclamation").css('color', '#FF7070');
-    } 
+    }
     if (!valid && !equality && !updatable) {
       $(".exclamation").hide();
+      $("#upload_all").hide();
     }
   }
   $(".card_name" ).each(function (){
     var id = $(this).data("id");
     var total_work = $(this).data("totalwork");
+    var total_spent = $(this).data("totalspent");
+    var total_offhour = $(this).data("totaloffhour");
     var total_bugfix = $(this).data("totalbugfix");
     var spent = $(this).data("spent");
     var offhour = $(this).data("offhour");
@@ -59,7 +62,7 @@ $(document).ready(function() {
         $.ajax({
           url: '/lists/update_card/',
           type: 'GET',
-          data: { card_id: id, total_work: total_work, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
+          data: { card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
           success: function(result) {
             $("#upload_spinner" + id).hide();
             $("#card_name" + id).css('background', 'white');
@@ -69,12 +72,14 @@ $(document).ready(function() {
             $("#bugfix" + id).text(result.factor_time_bugfix);
             $("#total_estimated").text(result.total_estimated);
             $("#total_work").text(result.total_work);
+            $("#total_spent").text(result.total_spent);
+            $("#total_offhour").text(result.total_offhour);
             $("#total_bugfix").text(result.total_bugfix);
             $("#spent" + id).prop('title', result.spent);
             $("#offhour" + id).prop('title', result.offhour);
             $("#bugfix" + id).prop('title', result.bugfix);
-            checkExclamation();
             checkSaveAll();
+            checkExclamation();
           }
         });
       }
@@ -85,7 +90,7 @@ $(document).ready(function() {
       $.ajax({
         url: '/lists/refresh_card/',
         type: 'GET',
-        data: { card_id: id, total_work: total_work, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
+        data: { card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
         success: function(result) {
           if (result.valid[0] === false) {
             $("#card_name" + id).css('background', '#FF7070');
@@ -95,6 +100,8 @@ $(document).ready(function() {
           if (result.updatable === true) {
             $("#card_name" + id).css('background', '#80e680');
             $("#upload" + id).show();
+          } else {
+            $("#upload" + id).hide();
           }
           if (result.valid[0] === true && result.equality === true && result.updatable === false) { $("#card_name" + id).css('background', 'white'); }
           $("#refresh_spinner" + id).hide();
@@ -105,12 +112,14 @@ $(document).ready(function() {
           $("#bugfix" + id).text(result.factor_time_bugfix || result.bugfix);
           $("#total_estimated").text(result.total_estimated);
           $("#total_work").text(result.total_work);
+          $("#total_spent").text(result.total_spent);
+          $("#total_offhour").text(result.total_offhour);
           $("#total_bugfix").text(result.total_bugfix);
           $("#spent" + id).prop('title', result.spent);
           $("#offhour" + id).prop('title', result.offhour);
           $("#bugfix" + id).prop('title', result.bugfix);
-          checkExclamation();
           checkSaveAll();
+          checkExclamation();
         }
       });
     })
@@ -121,6 +130,8 @@ $(document).ready(function() {
       $(".card_name").each(function() {
         var id = $(this).data("id");
         var total_work = $(this).data("totalwork");
+        var total_spent = $(this).data("totalspent");
+        var total_offhour = $(this).data("totaloffhour");
         var total_bugfix = $(this).data("totalbugfix");
         var spent = $(this).data("spent");
         var offhour = $(this).data("offhour");
@@ -132,7 +143,7 @@ $(document).ready(function() {
           $.ajax({
             url: '/lists/update_card/',
             type: 'GET',
-            data: { card_id: id, total_work: total_work, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
+            data: { card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
             success: function(result) {
               $("#upload_all").hide();
               $("#upload_spinner" + id).hide();
@@ -143,6 +154,8 @@ $(document).ready(function() {
               $("#bugfix" + id).text(result.factor_time_bugfix);
               $("#total_estimated").text(result.total_estimated);
               $("#total_work").text(result.total_work);
+              $("#total_spent").text(result.total_spent);
+              $("#total_offhour").text(result.total_offhour);
               $("#total_bugfix").text(result.total_bugfix);
               $("#spent" + id).prop('title', result.spent);
               $("#offhour" + id).prop('title', result.offhour);
@@ -154,6 +167,6 @@ $(document).ready(function() {
       });
     }
   });
-  checkExclamation();
   checkSaveAll();
+  checkExclamation();
 });

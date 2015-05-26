@@ -116,10 +116,14 @@ class ListsController < ApplicationController
       factor_time_spent = factor_time[:spent]
       factor_time_bugfix = factor_time[:bugfix]
       factor_time_offhour = factor_time[:offhour]
-      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + factor_time_spent + factor_time_offhour
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f - params[:bugfix].to_f + factor_time_spent + factor_time_offhour + factor_time_bugfix
+      total_spent = params[:total_spent].to_f - params[:spent].to_f + factor_time_spent
+      total_offhour = params[:total_offhour].to_f - params[:offhour].to_f + factor_time_offhour
       total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + factor_time_bugfix
     else
-      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + parsed_name[:spent] + parsed_name[:offhour]
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f - params[:bugfix].to_f + parsed_name[:spent] + parsed_name[:offhour] + parsed_name[:bugfix]
+      total_spent = params[:total_spent].to_f - params[:spent].to_f + parsed_name[:spent]
+      total_offhour = params[:total_offhour].to_f - params[:offhour].to_f + parsed_name[:offhour]
       total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + parsed_name[:bugfix]
     end
     estimated = parse_card_name(name)[:estimated]
@@ -149,6 +153,8 @@ class ListsController < ApplicationController
     threads.each { |t| t.join }
     data['total_estimated'] = total_estimated
     data['total_work'] = total_work
+    data['total_spent'] = total_spent
+    data['total_offhour'] = total_offhour
     data['total_bugfix'] = total_bugfix
     data['factor_time_spent'] = factor_time_spent
     data['factor_time_bugfix'] = factor_time_bugfix
@@ -188,10 +194,14 @@ class ListsController < ApplicationController
       factor_time_spent = factor_time[:spent]
       factor_time_bugfix = factor_time[:bugfix]
       factor_time_offhour = factor_time[:offhour]
-      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + factor_time_spent + factor_time_offhour
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f - params[:bugfix].to_f + factor_time_spent + factor_time_offhour + factor_time_bugfix
+      total_spent = params[:total_spent].to_f - params[:spent].to_f + factor_time_spent
+      total_offhour = params[:total_offhour].to_f - params[:offhour].to_f + factor_time_offhour
       total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + factor_time_bugfix
     else
-      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f + parsed_name[:spent] + parsed_name[:offhour]
+      total_work = params[:total_work].to_f - params[:spent].to_f - params[:offhour].to_f - params[:bugfix].to_f + parsed_name[:spent] + parsed_name[:offhour] + parsed_name[:bugfix]
+      total_spent = params[:total_spent].to_f - params[:spent].to_f + parsed_name[:spent]
+      total_offhour = params[:total_offhour].to_f - params[:offhour].to_f + parsed_name[:offhour]
       total_bugfix = params[:total_bugfix].to_f - params[:bugfix].to_f + parsed_name[:bugfix]
     end
     cards = @list.cards
@@ -206,6 +216,8 @@ class ListsController < ApplicationController
     threads.each { |t| t.join }
     data['total_estimated'] = total_estimated
     data['total_work'] = total_work
+    data['total_spent'] = total_spent
+    data['total_offhour'] = total_offhour
     data['total_bugfix'] = total_bugfix
     data['valid'] = valid
     data['equality'] = equality
@@ -258,6 +270,8 @@ class ListsController < ApplicationController
     threads = []
     total_estimated = 0
     total_work = 0
+    total_spent = 0
+    total_offhour = 0
     total_bugfix = 0
     @lists.each do |list|
       list.cards.each do |card|
@@ -282,10 +296,14 @@ class ListsController < ApplicationController
             factor_time_spent = factor_time[:spent]
             factor_time_bugfix = factor_time[:bugfix]
             factor_time_offhour = factor_time[:offhour]
-            total_work += factor_time_spent + factor_time_offhour
+            total_work += factor_time_spent + factor_time_offhour + factor_time_bugfix
+            total_spent += factor_time_spent
+            total_offhour += factor_time_offhour
             total_bugfix += factor_time_bugfix
           else
-            total_work += parsed_name[:spent] + parsed_name[:offhour]
+            total_work += parsed_name[:spent] + parsed_name[:offhour] + parsed_name[:bugfix]
+            total_spent += parsed_name[:spent]
+            total_offhour += parsed_name[:offhour]
             total_bugfix += parsed_name[:bugfix]
           end
           @rows << {
@@ -316,6 +334,8 @@ class ListsController < ApplicationController
     @sum = {
       total_estimated: total_estimated,
       total_work: total_work,
+      total_spent: total_spent,
+      total_offhour: total_offhour,
       total_bugfix: total_bugfix
     }
     @rows.sort_by! { |row| row[:pos] }
