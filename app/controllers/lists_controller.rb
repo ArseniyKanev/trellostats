@@ -324,7 +324,6 @@ class ListsController < ApplicationController
             desc: desc,
             list_name: list.name,
             url: card.short_url,
-            pos: card.pos,
             list_pos: list.pos,
             factor_time_spent: factor_time_spent,
             factor_time_bugfix: factor_time_bugfix,

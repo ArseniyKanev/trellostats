@@ -11,7 +11,12 @@ class ApplicationController < ActionController::Base
 
   def trello_user
     return unless system_user
-    @trello_user ||= fetch_member(system_user.uid)
+    Rails.logger.debug "====== system_user present"
+    @trello_user ||= begin
+      a = fetch_member(system_user.uid)
+      Rails.logger.debug "====== trello_user #{a.inspect}"
+      a
+    end
   end
 
   def trello_client
