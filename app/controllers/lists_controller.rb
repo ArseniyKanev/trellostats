@@ -270,7 +270,7 @@ class ListsController < ApplicationController
   end
 
   def get_data
-    Object.const_set("CHECKLIST_ITEM_NAME_RGX", /\A((?!(#{@members.join('|')}\s+\d+\.\d+\s+\[\S+\]\s*)).)*((#{@members.join('|')})\s+(\d+\.\d+\s+\[\S+\]\s*)+)+\z/)
+    Object.const_set("CHECKLIST_ITEM_NAME_RGX", /\A((?!(#{@members.join('|')}\s+)).)*((#{@members.join('|')})\s+(\d+\.\d+\s+\[\S+\]\s*)+)+\z/)
     Object.const_set("DESC_RGX", /(^(\d+\.\d+\s*((#{@members.join('|')})\s*\[\S*\]\s*)+)+)$/)
     @rows = []
     threads = []
