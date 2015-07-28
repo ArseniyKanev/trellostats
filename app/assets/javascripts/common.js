@@ -63,7 +63,7 @@ $(document).ready(function() {
         $.ajax({
           url: '/lists/update_card/',
           type: 'GET',
-          data: { card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
+          data: { card_name: card_name, card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
           success: function(result) {
             $("#upload_spinner" + id).hide();
             $("#card_name" + id).css('background', 'white');
@@ -92,7 +92,7 @@ $(document).ready(function() {
       $.ajax({
         url: '/lists/refresh_card/',
         type: 'GET',
-        data: { card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
+        data: { card_name: card_name, card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
         success: function(result) {
           if (result.valid[0] === false) {
             $("#card_name" + id).css('background', '#FF7070');
@@ -140,13 +140,14 @@ $(document).ready(function() {
         var offhour = $(this).data("offhour");
         var bugfix = $(this).data("bugfix");
         var id = $(this).data("id");
+        var card_name = $(this).data("name");
         if ($("#upload" + id).is(":visible")) {
           $("#upload" + id).hide();
           $("#upload_spinner" + id).show();
           $.ajax({
             url: '/lists/update_card/',
             type: 'GET',
-            data: { card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
+            data: { card_name: card_name, card_id: id, total_work: total_work, total_spent: total_spent, total_offhour: total_offhour, total_bugfix: total_bugfix, spent: spent, offhour: offhour, bugfix: bugfix },
             success: function(result) {
               $("#upload_all").hide();
               $("#upload_spinner" + id).hide();
