@@ -407,7 +407,7 @@ class ListsController < ApplicationController
       date_stat.each do |member, hours|
         out += ' ' + member + ' ' + '['
         hours.each do |type, hour|
-          if hour != 0
+          if hour.to_s != "0"
             case type
             when :spent
               out += "%g" % ("%.2f" % hour)
