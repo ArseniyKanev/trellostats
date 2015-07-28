@@ -163,6 +163,7 @@ class ListsController < ApplicationController
     data['factor_time_spent'] = factor_time_spent
     data['factor_time_bugfix'] = factor_time_bugfix
     data['factor_time_offhour'] = factor_time_offhour
+    data['card_name'] = parsed_name[:name]
     render json: data
   end
 
@@ -229,6 +230,7 @@ class ListsController < ApplicationController
     data['factor_time_spent'] = factor_time_spent
     data['factor_time_bugfix'] = factor_time_bugfix
     data['factor_time_offhour'] = factor_time_offhour
+    data['card_name'] = parsed_name[:name]
     render json: data
   end
 

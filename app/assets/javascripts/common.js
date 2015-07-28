@@ -48,6 +48,7 @@ $(document).ready(function() {
     var spent = $(this).data("spent");
     var offhour = $(this).data("offhour");
     var bugfix = $(this).data("bugfix");
+    var card_name = $(this).data("name");
     if ($(this).data("valid")[0] === false) { $(this).css('background', '#FF7070'); }
     if ($(this).data("equality") === false) { $(this).css('background', '#FFFF33'); }
     if ($(this).data("updatable") === true) {
@@ -78,6 +79,7 @@ $(document).ready(function() {
             $("#spent" + id).prop('title', result.spent);
             $("#offhour" + id).prop('title', result.offhour);
             $("#bugfix" + id).prop('title', result.bugfix);
+            $($("#popup" + id).children()[0]).text(result.card_name);
             checkSaveAll();
             checkExclamation();
           }
@@ -118,6 +120,7 @@ $(document).ready(function() {
           $("#spent" + id).prop('title', result.spent);
           $("#offhour" + id).prop('title', result.offhour);
           $("#bugfix" + id).prop('title', result.bugfix);
+          $($("#popup" + id).children()[0]).text(result.card_name);
           checkSaveAll();
           checkExclamation();
         }
@@ -160,6 +163,7 @@ $(document).ready(function() {
               $("#spent" + id).prop('title', result.spent);
               $("#offhour" + id).prop('title', result.offhour);
               $("#bugfix" + id).prop('title', result.bugfix);
+              $($("#popup" + id).children()[0]).text(result.card_name);
               checkExclamation();
             }
           });
