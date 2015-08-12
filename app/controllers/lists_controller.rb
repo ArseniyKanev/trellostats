@@ -713,11 +713,12 @@ class ListsController < ApplicationController
 
   def check_validity(checklists, desc)
     hours = /\[[\/\d\.\-\^]*\]/
+    user_date = /(#{@members.join('|')})\s*\d+\.\d+/
     estimated_user = /\(\S+\)\s*(#{@members.join('|')})/
     estimated = /\(\d*\.?\d*\)/
     checklists.each do |checklist|
       checklist.items.each do |item|
-        if item.name.match(hours)
+        if item.name.match(hours) || item.name.match(user_date)
           if !item.name.match(CHECKLIST_ITEM_NAME_RGX)
             return [false, "Ошибка в чеклисте: #{item.name}"]
           end
