@@ -107,6 +107,7 @@ class ListsController < ApplicationController
     @board = trello_client.find(:board, card.board_id)
     @members = @board.members.map { |member| '@' + member.username }
     @list = trello_client.find(:list, card.list_id)
+    lists = session[:selected].present? ? @board.lists.map { |list| list if session[:selected].include? list.id }.compact : [@list]
     name, desc, checklists, factor_time = card.name, card.desc, card.checklists, nil
     if checklists.size > 0 && check_for_hours(checklists)
       card_stat = checklists_stat_by_date(checklists)
@@ -148,10 +149,20 @@ class ListsController < ApplicationController
     cards = @list.cards
     threads = []
     total_estimated = 0
-    cards.each do |card|
-      threads << Thread.new do
-        parsed_name = parse_card_name(card.name)
-        total_estimated += parsed_name[:estimated]
+    total_offhour = 0
+    total_bugfix = 0
+    total_spent = 0
+    total_work = 0
+    lists.each do |list|
+      list.cards.each do |card|
+        threads << Thread.new do
+          parsed_name = parse_card_name(card.name)
+          total_estimated += parsed_name[:estimated]
+          total_spent += parsed_name[:spent]
+          total_offhour += parsed_name[:offhour]
+          total_bugfix += parsed_name[:bugfix]
+          total_work += parsed_name[:spent] + parsed_name[:offhour] + parsed_name[:bugfix]
+        end
       end
     end
     threads.each { |t| t.join }
@@ -173,6 +184,7 @@ class ListsController < ApplicationController
     @members = @board.members.map { |member| '@' + member.username }
     @list = trello_client.find(:list, card.list_id)
     name, desc, checklists = card.name, card.desc, card.checklists
+    lists = session[:selected].present? ? @board.lists.map { |list| list if session[:selected].include? list.id }.compact : [@list]
     parsed_name = parse_card_name(name)
 
     equality, updatable, factor_time = nil, nil, nil
@@ -212,10 +224,20 @@ class ListsController < ApplicationController
     cards = @list.cards
     threads = []
     total_estimated = 0
-    cards.each do |card|
-      threads << Thread.new do
-        parsed_name = parse_card_name(card.name)
-        total_estimated += parsed_name[:estimated]
+    total_offhour = 0
+    total_bugfix = 0
+    total_spent = 0
+    total_work = 0
+    lists.each do |list|
+      list.cards.each do |card|
+        threads << Thread.new do
+          parsed_name = parse_card_name(card.name)
+          total_estimated += parsed_name[:estimated]
+          total_spent += parsed_name[:spent]
+          total_offhour += parsed_name[:offhour]
+          total_bugfix += parsed_name[:bugfix]
+          total_work += parsed_name[:spent] + parsed_name[:offhour] + parsed_name[:bugfix]
+        end
       end
     end
     threads.each { |t| t.join }
