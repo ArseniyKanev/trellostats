@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
+ruby '2.2.3'
 
 gem 'rails', '~> 4.2.0'
 gem 'pg', '~> 0.18.1'
@@ -12,7 +12,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'slim', '~> 3.0.3'
 gem 'jquery-rails', '~> 4.0.3'
 gem 'spring', '~> 1.3.3'
-gem 'ruby-trello', '~> 1.1.3'
+gem 'ruby-trello'
 gem 'axlsx', '~> 2.0.1'
 gem 'axlsx_rails', '~> 0.3.0'
 gem 'dotenv-rails', '~> 2.0.0'
