@@ -302,7 +302,9 @@ class ListsController < ApplicationController
     total_offhour = 0
     total_bugfix = 0
     @lists.each do |list|
+      sleep(1)
       list.cards.each do |card|
+        sleep(0.1)
         threads << Thread.new do
           parsed_name = parse_card_name(card.name)
           total_estimated += parsed_name[:estimated]
