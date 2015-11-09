@@ -21,7 +21,9 @@ class ListsController < ApplicationController
     hosting:    'Хостинг',
     layout:     'Верстка',
     meeting:    'Консультации',
+    meetings:   'Консультации',
     partner:    'Кабинет партнера',
+    pm:         'Управление проектом',
     recommend:  'Рекомендации',
     small:      'Мелкие улучшения',
     stats:      'Статистика',
@@ -29,6 +31,7 @@ class ListsController < ApplicationController
     tracking:   'Трекинг проектов',
     trello:     'Таск-трекер',
     trellostat: 'Треллостат',
+    trigger:    'Триггерная рассылка',
     triggers:   'Триггерная рассылка',
     users:      'Пользователи',
     video:      'Видео'
