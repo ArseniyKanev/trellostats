@@ -6,6 +6,7 @@ class ListsController < ApplicationController
   TIME_SLICE = 31
 
   THEMES = {
+    accel:      'Отбор в Акселератор',
     account:    'Аккаунт-менеджер',
     analyze:    'Анализ',
     anketa:     'Анкета',
