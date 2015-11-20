@@ -341,6 +341,14 @@ class ListsController < ApplicationController
             total_offhour += parsed_name[:offhour]
             total_bugfix += parsed_name[:bugfix]
           end
+
+          # Округлим все результаты до 3-х после запятой
+          %i(factor_time_spent factor_time_bugfix factor_time_offhour total_work total_spent total_offhour total_bugfix).each do |var|
+            if binding.local_variable_defined?(var)
+              binding.local_variable_set(var, binding.local_variable_get(var).try(:round, 3))
+            end
+          end
+
           @rows << {
             id: card.id,
             theme: parsed_name[:theme],
