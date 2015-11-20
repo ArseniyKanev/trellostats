@@ -11,12 +11,7 @@ class ApplicationController < ActionController::Base
 
   def trello_user
     return unless system_user
-    Rails.logger.debug "====== system_user present"
-    @trello_user ||= begin
-      a = fetch_member(system_user.uid)
-      Rails.logger.debug "====== trello_user #{a.inspect}"
-      a
-    end
+    @trello_user ||= fetch_member(system_user.uid)
   end
 
   def trello_client
@@ -29,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate
-    redirect_to login_url unless system_user
+    redirect_to login_url if !system_user || !trello_user
   end
 
   def fetch_member(member_id, force = false)
