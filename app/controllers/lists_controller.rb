@@ -291,6 +291,7 @@ class ListsController < ApplicationController
   end
 
   def multiple_lists
+    session[:selected].reject!(&:empty?)
     @lists = session[:selected].map { |list_id| trello_client.find(:list, list_id) }
     @board = trello_client.find(:board, @lists[0].board_id)
     @members = @board.members.map { |member| '@' + member.username }
