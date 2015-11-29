@@ -1,4 +1,12 @@
 javascript:
+  function checkAll(box) {
+    var cbs = document.getElementsByTagName('input');
+    for(var i = 0; i < cbs.length; i++) {
+      if(cbs[i].type == 'checkbox') {
+        cbs[i].checked = box.checked;
+      }
+    }
+  }
   $(document).ready(function() {
     $(":checkbox:checked").prop('checked', false);
     $('.show_cards').click(function() {
@@ -11,7 +19,6 @@ javascript:
         });
       }
     });
-    $('#check_all').on("click", function(){ $('input[type="checkbox"]').click(); });
   });
 
 title Trellostat
@@ -21,7 +28,7 @@ p
   a.show_cards href="javascript:void(0);"
     | Показать карточки
 p
-  button#check_all type="button"
+  input onclick="checkAll(this)" type="checkbox"
     | Выделить все
 
 - @lists.each do |list|
