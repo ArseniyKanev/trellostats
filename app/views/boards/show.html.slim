@@ -11,6 +11,7 @@ javascript:
         });
       }
     });
+    $('#check_all').on("click", function(){ $('input[type="checkbox"]').click(); });
   });
 
 title Trellostat
@@ -19,6 +20,10 @@ h2 = @board.name
 p
   a.show_cards href="javascript:void(0);"
     | Показать карточки
+p
+  button#check_all type="button"
+    | Выделить все
+
 - @lists.each do |list|
   li.list
     = check_box_tag list.id, "", false, class: 'checkbox'
