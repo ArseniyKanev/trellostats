@@ -43,7 +43,7 @@ class ListsController < ApplicationController
     '@vaskovans' => 0.5,
     '@pavelpashkevich' => 0.75,
     '@nedelkin' => 0.75,
-    '@revisv' => 0.55
+    '@revisv' => 0.7
   }
 
   def show
