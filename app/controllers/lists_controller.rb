@@ -39,14 +39,13 @@ class ListsController < ApplicationController
 
   FACTORS = {
     '@arseniykanev' => 0.55,
-    #'@ksilenium' => 0.75,
     '@vaskovans' => 0.5,
-    #'@pavelpashkevich' => 0.75,
     '@nedelkin' => 0.85,
     '@revisv' => 0.75,
     '@alexkuk' => 0.45,
     '@dmitryzvorykin' => 0.55,
-    '@astulov' => 0.45
+    '@astulov_' => 0.45,
+    '@zafod' => 0.75
   }
 
   def show
