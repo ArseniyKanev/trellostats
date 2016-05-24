@@ -38,14 +38,14 @@ class ListsController < ApplicationController
   }
 
   FACTORS = {
+    '@alexkuk' => 0.45,
     '@arseniykanev' => 0.55,
-    '@vaskovans' => 0.5,
+    '@arkasha69_' => 0.55,
+    '@dmitryzvorykin' => 0.55,
     '@nedelkin' => 0.85,
     '@revisv' => 0.75,
-    '@alexkuk' => 0.45,
-    '@dmitryzvorykin' => 0.55,
-    '@astulov_' => 0.45,
-    '@zafod' => 0.75
+    '@vaskovans' => 0.5,
+    '@zafod' => 0.95
   }
 
   def show
