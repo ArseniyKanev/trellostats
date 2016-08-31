@@ -13,7 +13,7 @@ wb.add_worksheet(name: "Отчет") do |sheet|
     else
       estimated = nil
     end
-    sheet.add_row [row[:theme], row[:name], estimated, spent + offhour + bugfix, "", row[:url]]
+    sheet.add_row [row[:theme], row[:name], estimated, spent + offhour, bugfix, "", row[:url]]
     theme_prev = theme
   end
 end
