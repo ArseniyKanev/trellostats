@@ -38,11 +38,10 @@ class ListsController < ApplicationController
   }
 
   FACTORS = {
+    '@antivitla' => 1.25,
     '@alexkuk' => 0.45,
     '@arseniykanev' => 0.55,
-    '@arkasha69_' => 0.55,
     '@dmitryzvorykin' => 0.675,
-    '@nedelkin' => 0.85,
     '@revisv' => 0.75,
     '@vaskovans' => 0.5,
     '@zafod' => 0.95
