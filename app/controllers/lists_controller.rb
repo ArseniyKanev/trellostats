@@ -6,35 +6,10 @@ class ListsController < ApplicationController
   TIME_SLICE = 31
 
   THEMES = {
-    accel:      'Отбор в Акселератор',
-    account:    'Аккаунт-менеджер',
-    analyze:    'Анализ',
-    anketa:     'Анкета',
-    api:        'API',
-    appcraft:   'AppCraft',
-    auth:       'Авторизация',
-    core:       'CoreCRM',
-    doc:        'Документация',
-    export:     'Экспорт/подача заявки',
-    feed:       'Лента проекта',
+    feature:    'Новый функционал',
     improve:    'Улучшения',
-    hosting:    'Хостинг',
-    layout:     'Верстка',
-    meeting:    'Консультации',
-    meetings:   'Консультации',
-    partner:    'Кабинет партнера',
-    pm:         'Управление проектом',
-    recommend:  'Рекомендации',
-    small:      'Мелкие улучшения',
-    stats:      'Статистика',
-    support:    'Поддержка',
-    tracking:   'Трекинг проектов',
-    trello:     'Таск-трекер',
-    trellostat: 'Треллостат',
-    trigger:    'Триггерная рассылка',
-    triggers:   'Триггерная рассылка',
-    users:      'Пользователи',
-    video:      'Видео'
+    refactor:   'Рефактор',
+    misc:       'Разное',
   }
 
   FACTORS = {
@@ -299,8 +274,8 @@ class ListsController < ApplicationController
   end
 
   def get_data
-    Object.const_set("CHECKLIST_ITEM_NAME_RGX", /\A((?!(#{@members.join('|')}\s+)).)*((#{@members.join('|')})\s+(\d+\.\d+\s+\[\S+\]\s*)+)+\z/)
-    Object.const_set("DESC_RGX", /(^(\d+\.\d+\s*((#{@members.join('|')})\s*\[\S*\]\s*)+)+)$/)
+    Object.const_set("CHECKLIST_ITEM_NAME_RGX", /\A((?!(#{members.join('|')}\s+)).)*((#{members.join('|')})\s+(\d+\.\d+\s+\[\S+\]\s*)+)+\z/)
+    Object.const_set("DESC_RGX", /(^(\d+\.\d+\s*((#{members.join('|')})\s*\[\S*\]\s*)+)+)$/)
     @rows = []
     threads = []
     total_estimated = 0
@@ -635,7 +610,7 @@ class ListsController < ApplicationController
 
   def checklists_estimated_stat(checklists)
     total_estimated = 0
-    estimated_user = /\((\d*\.?\d*)\)\s*(#{@members.join('|')})/
+    estimated_user = /\((\d*\.?\d*)\)\s*(#{members.join('|')})/
     estimated_no_data = /\A.*\((\d*\.?\d*)\)\z/
     checklists.each do |checklist|
       checklist.items.each do |item|
@@ -653,8 +628,8 @@ class ListsController < ApplicationController
     card_stat = {}
     checklists.each do |checklist|
       checklist.items.each do |item|
-        if item.name =~ /\[\S+\]/ && item.name.scan(/(#{@members.join('|')})\s*([^@]+)/)
-          item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).each do |e|
+        if item.name =~ /\[\S+\]/ && item.name.scan(/(#{members.join('|')})\s*([^@]+)/)
+          item.name.scan(/(#{members.join('|')})\s*([^@]+)/).each do |e|
             member_stat = [e].to_h
             member_stat.each do |member, date_hours|
               card_stat[member] ||= {}
@@ -682,7 +657,7 @@ class ListsController < ApplicationController
       desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
       desc.each do |line|
         date = nearest_date(line.split[0])
-        members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
+        members_stat = line.scan(/(#{members.join('|')})\s*([^@]+)/)
         members_stat.each do |member_hours|
           member_hours[1].strip!
           card_stat[member_hours[0]] ||= {}
@@ -703,8 +678,8 @@ class ListsController < ApplicationController
     card_stat = {}
     checklists.each do |checklist|
       checklist.items.each do |item|
-        if item.name =~ /\[\S+\]/ && item.name.scan(/(#{@members.join('|')})\s*([^@]+)/)
-          item.name.scan(/(#{@members.join('|')})\s*([^@]+)/).each do |e|
+        if item.name =~ /\[\S+\]/ && item.name.scan(/(#{members.join('|')})\s*([^@]+)/)
+          item.name.scan(/(#{members.join('|')})\s*([^@]+)/).each do |e|
             member_stat = [e].to_h
             member_stat.each do |member, date_hours|
               date_hours.split.each_slice(2) do |day_hours|
@@ -733,7 +708,7 @@ class ListsController < ApplicationController
       desc = DESC_RGX.match(desc.split("~~~").last)[0].split("\n")
       desc.each do |line|
         date = nearest_date(line.split[0])
-        members_stat = line.scan(/(#{@members.join('|')})\s*([^@]+)/)
+        members_stat = line.scan(/(#{members.join('|')})\s*([^@]+)/)
         members_stat.each do |member_hours|
           member_hours[1].strip!
           card_stat[date] ||= {}
@@ -750,10 +725,14 @@ class ListsController < ApplicationController
     card_stat
   end
 
+  def members
+    (@members + FACTORS.keys).uniq
+  end
+
   def check_validity(checklists, desc)
     hours = /\[[\/\d\.\-\^]*\]/
-    user_date = /(#{@members.join('|')})\s*\d+\.\d+\s*\D+/
-    estimated_user = /\(\S+\)\s*(#{@members.join('|')})/
+    user_date = /(#{members.join('|')})\s*\d+\.\d+\s*\D+/
+    estimated_user = /\(\S+\)\s*(#{members.join('|')})/
     estimated = /\(\d*\.?\d*\)/
     checklists.each do |checklist|
       checklist.items.each do |item|
@@ -771,7 +750,7 @@ class ListsController < ApplicationController
     flag = false
     desc = desc.split("\n")
     flag = true if desc.size >= 0
-    hours = /(#{@members.join('|')})\s*\[[\/\d\.\-\^]*\]/
+    hours = /(#{members.join('|')})\s*\[[\/\d\.\-\^]*\]/
     members = /\@(\w+)\s+\[[\/\d\.\-\^]*\]/
     desc.each do |line|
       if line.match(hours)
