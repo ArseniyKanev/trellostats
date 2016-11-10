@@ -6,6 +6,7 @@ class ListsController < ApplicationController
   TIME_SLICE = 31
 
   THEMES = {
+    bug:        'Ошибки',
     feature:    'Новый функционал',
     improve:    'Улучшения',
     refactor:   'Рефактор',
