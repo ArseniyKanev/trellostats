@@ -27,6 +27,9 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  # Quiet assets truly way http://blog.bigbinary.com/2016/09/02/rails-5-silences-assets-logs-in-development-mode-by-default.html
+  config.assets.quiet = true
+
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
