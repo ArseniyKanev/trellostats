@@ -7,10 +7,13 @@ class ListsController < ApplicationController
 
   THEMES = {
     bug:        'Ошибки',
+    docs:       'Документация',
+    doc:        'Документация',
     feature:    'Новый функционал',
     improve:    'Улучшения',
     refactor:   'Рефактор',
     misc:       'Разное',
+    test:       'Тестирование'
   }
 
   FACTORS = {
