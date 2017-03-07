@@ -6,7 +6,8 @@ class ListsController < ApplicationController
   TIME_SLICE = 31
 
   THEMES = {
-    bug:        'Ошибки',
+    bug:        'Дефекты',
+    bugfix:     'Дефекты',
     docs:       'Документация',
     doc:        'Документация',
     feature:    'Новый функционал',
@@ -17,14 +18,13 @@ class ListsController < ApplicationController
   }
 
   FACTORS = {
-    '@antivitla' => 1,
-    '@alexkuk' => 0.3,
-    '@elenakoles' => 0.3,
-    '@arseniykanev' => 0.4,
-    '@dmitryzvorykin' => 0.5,
-    '@revisv' => 0.5,
-    '@vaskovans' => 0.5,
-    '@zafod' => 0.7
+    '@antivitla' => 1.15,
+    '@arseniykanev' => 0.46,
+    '@dmitryzvorykin' => 0.575,
+    '@eagleas' => 1.0,
+    '@elenakoles' => 0.35,
+    '@vaskovans' => 0.35,
+    '@zafod' => 0.805
   }
 
   def show
